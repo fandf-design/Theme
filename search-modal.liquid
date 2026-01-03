@@ -1,0 +1,22 @@
+{% comment %}Minimal search modal. Uses native Shopify search.{% endcomment %}
+<style>
+  .search-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:hsl(var(--background)/.92);border-top:1px solid hsl(var(--border));z-index:100}
+  .search-modal[data-open="true"]{display:flex}
+  .search-box{width:min(720px,92vw);border:1px solid hsl(var(--border));background:hsl(var(--card));padding:1.25rem}
+  .search-box form{display:flex;gap:.75rem;align-items:center}
+  .search-box input{flex:1}
+</style>
+<div class="search-modal" data-search-modal data-open="false" role="dialog" aria-modal="true">
+  <div class="search-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div class="text-meta">Search</div>
+      <button class="icon-btn" type="button" data-search-close aria-label="Close">×</button>
+    </div>
+    <form action="{{ routes.search_url }}" method="get" role="search">
+      <input data-search-input type="search" name="q" placeholder="Search Volumes, Issues, Chronicle" />
+      <input type="hidden" name="type" value="product,collection,article" />
+      <button class="cta" type="submit" style="padding:.65rem 1rem;">Search</button>
+    </form>
+    <div class="text-meta" style="margin-top:1rem;">Locked Volumes do not reveal detail.</div>
+  </div>
+</div>

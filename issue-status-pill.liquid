@@ -1,0 +1,13 @@
+{% comment %}Status pill + label mapping{% endcomment %}
+{% assign s = status | downcase %}
+{% if s == 'limited' %}
+  <span class="pill">Limited Quantity</span>
+{% elsif s == 'reserve' %}
+  <span class="pill">Reserve</span>
+{% elsif s == 'alert' %}
+  <span class="pill">Alert Me</span>
+{% elsif s == 'vaulted' %}
+  <span class="pill">Vaulted</span>
+{% else %}
+  <span class="pill pill--published">In Circulation</span>
+{% endif %}

@@ -1,0 +1,13 @@
+{% comment %}Issue card{% endcomment %}
+<a class="card" href="{{ product.url }}">
+  <div class="text-meta">Issue</div>
+  <div class="text-display" style="font-size:1.6rem;margin:.35rem 0 .6rem;">{{ product.title }}</div>
+  {% if product.featured_image %}
+    <img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.featured_image.alt | escape }}" style="width:100%;height:auto;border:1px solid hsl(var(--border));margin:.5rem 0 1rem;">
+  {% endif %}
+  {% assign status = product.metafields.custom.status | default: '' %}
+  {% render 'issue-status-pill', status: status %}
+  <div class="muted" style="margin-top:.75rem;font-size:.95rem;">
+    {{ product.metafields.custom.issue_story | strip_html | truncate: 120 }}
+  </div>
+</a>
