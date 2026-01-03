@@ -1,0 +1,17 @@
+[
+  {
+    "name": "FANG & FLEECE",
+    "settings": [
+      {
+        "type": "select",
+        "id": "default_theme",
+        "label": "Default theme",
+        "options": [
+          { "value": "dark", "label": "Dark" },
+          { "value": "light", "label": "Light" }
+        ],
+        "default": "dark"
+      }
+    ]
+  }
+]
