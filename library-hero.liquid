@@ -1,0 +1,21 @@
+{% comment %}Library hero{% endcomment %}
+<section class="hero">
+  <div class="container">
+    <div class="text-meta">{{ section.settings.kicker }}</div>
+    <h1 class="text-display-xl" style="margin:.75rem 0 1rem;">{{ section.settings.title }}</h1>
+    <div class="muted" style="max-width:58ch;font-size:1.05rem;">
+      {{ section.settings.description }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Library hero",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Prologue" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The Library" },
+    { "type": "text", "id": "description", "label": "Subtitle", "default": "Where the archive begins." }
+  ]
+}
+{% endschema %}

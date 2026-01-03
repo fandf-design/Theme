@@ -1,0 +1,63 @@
+{% comment %}Volume shelf{% endcomment %}
+<section class="volume-shelf">
+  <div class="container">
+    <div class="text-meta">{{ section.settings.kicker }}</div>
+    <h2 class="text-display-lg" style="margin:.5rem 0 0;">{{ section.settings.title }}</h2>
+
+    <div class="shelf-row" role="list">
+      {% for block in section.blocks %}
+        {% assign col = collections[block.settings.collection] %}
+        {% if col != blank %}
+          {% assign access = col.metafields.custom.access | default: '' %}
+          {% assign locked = false %}
+          {% if block.settings.force_locked %}
+            {% assign locked = true %}
+          {% elsif access == 'locked' %}
+            {% assign locked = true %}
+          {% endif %}
+
+          {% if locked %}
+            <div class="spine locked" role="listitem" aria-disabled="true">
+              <div class="locked-mask" aria-hidden="true"></div>
+              <div class="text-meta">Volume {{ block.settings.volume_number | escape }}</div>
+              <div class="text-display" style="font-size:2rem;margin:.4rem 0 .3rem;">{{ col.title }}</div>
+              <div class="text-meta">Locked</div>
+            </div>
+          {% else %}
+            <a class="spine" role="listitem" href="{{ col.url }}">
+              <div class="text-meta">Volume {{ block.settings.volume_number | escape }}</div>
+              <div class="text-display" style="font-size:2rem;margin:.4rem 0 .3rem;">{{ col.title }}</div>
+              {% if col.metafields.custom.subtitle != blank %}
+                <div class="muted" style="margin-top:.4rem;">{{ col.metafields.custom.subtitle }}</div>
+              {% endif %}
+            </a>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Volume shelf",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Volumes" },
+    { "type": "text", "id": "title", "label": "Title", "default": "In Circulation" }
+  ],
+  "blocks": [
+    {
+      "type": "volume",
+      "name": "Volume",
+      "settings": [
+        { "type": "text", "id": "volume_number", "label": "Volume number (Roman)", "default": "I" },
+        { "type": "collection", "id": "collection", "label": "Collection (Volume)" },
+        { "type": "checkbox", "id": "force_locked", "label": "Force locked (override)", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Volume shelf", "blocks": [ { "type": "volume" } ] }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,23 @@
+{% comment %}Chronicle article{% endcomment %}
+<section class="hero">
+  <div class="container">
+    <div class="text-meta">Chronicle</div>
+    <h1 class="text-display-lg" style="margin:.75rem 0 1rem;">{{ article.title }}</h1>
+    <div class="text-meta">{{ article.published_at | date: "%B %d, %Y" }}</div>
+  </div>
+</section>
+
+<section style="padding:3rem 0;">
+  <div class="container" style="max-width:860px;">
+    <div class="card">
+      {{ article.content }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main article",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{% comment %}Volume / Chapter page{% endcomment %}
+{% assign access = collection.metafields.custom.access | default: '' %}
+{% if access == 'locked' %}
+  <section class="hero">
+    <div class="container">
+      <div class="text-meta">Locked</div>
+      <h1 class="text-display-lg" style="margin:.75rem 0 1rem;">{{ collection.title }}</h1>
+      <div class="muted">This Volume is not yet in circulation.</div>
+    </div>
+  </section>
+{% else %}
+  <section class="hero">
+    <div class="container">
+      <div class="text-meta">Volume</div>
+      <h1 class="text-display-lg" style="margin:.75rem 0 1rem;">{{ collection.title }}</h1>
+      {% if collection.metafields.custom.subtitle != blank %}
+        <div class="muted" style="max-width:70ch;">{{ collection.metafields.custom.subtitle }}</div>
+      {% endif %}
+      {% if collection.metafields.custom.manifesto != blank %}
+        <div class="card" style="margin-top:2rem;">
+          <div class="text-meta">Manifesto</div>
+          <div style="margin-top:.75rem;">{{ collection.metafields.custom.manifesto }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <section style="padding:3rem 0;">
+    <div class="container">
+      <div class="grid">
+        {% for product in collection.products %}
+          {% render 'product-card', product: product %}
+        {% else %}
+          <div class="muted">No Issues in circulation.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Collection archive",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,55 @@
+{% comment %}Search results{% endcomment %}
+<section class="hero">
+  <div class="container">
+    <div class="text-meta">Search</div>
+    <h1 class="text-display-lg" style="margin:.75rem 0 0;">Results</h1>
+  </div>
+</section>
+
+<section style="padding:3rem 0;">
+  <div class="container">
+    {% if search.performed %}
+      <div class="text-meta">{{ search.results_count }} result(s) for “{{ search.terms | escape }}”</div>
+      <div class="grid" style="margin-top:1.5rem;">
+        {% for item in search.results %}
+          {% if item.object_type == 'collection' %}
+            {% assign access = item.metafields.custom.access | default: '' %}
+            {% if access == 'locked' %}
+              <div class="card locked" aria-disabled="true">
+                <div class="locked-mask" aria-hidden="true"></div>
+                <div class="text-meta">Volume</div>
+                <div class="text-display" style="font-size:1.6rem;margin:.35rem 0 .6rem;">{{ item.title }}</div>
+                <div class="text-meta">Locked</div>
+              </div>
+            {% else %}
+              <a class="card" href="{{ item.url }}">
+                <div class="text-meta">Volume</div>
+                <div class="text-display" style="font-size:1.6rem;margin:.35rem 0 .6rem;">{{ item.title }}</div>
+                {% if item.metafields.custom.subtitle != blank %}
+                  <div class="muted">{{ item.metafields.custom.subtitle }}</div>
+                {% endif %}
+              </a>
+            {% endif %}
+          {% elsif item.object_type == 'product' %}
+            {% render 'product-card', product: item %}
+          {% elsif item.object_type == 'article' %}
+            <a class="card" href="{{ item.url }}">
+              <div class="text-meta">Chronicle</div>
+              <div class="text-display" style="font-size:1.6rem;margin:.35rem 0 .6rem;">{{ item.title }}</div>
+              <div class="muted">{{ item.excerpt_or_content | strip_html | truncate: 140 }}</div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="muted">Search not performed.</div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main search",
+  "settings": []
+}
+{% endschema %}

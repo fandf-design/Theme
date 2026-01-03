@@ -1,0 +1,62 @@
+{% comment %}Cart{% endcomment %}
+<section class="hero">
+  <div class="container">
+    <div class="text-meta">Cart</div>
+    <h1 class="text-display-lg" style="margin:.75rem 0 0;">The Cart</h1>
+  </div>
+</section>
+
+<section style="padding:3rem 0;">
+  <div class="container" style="max-width:980px;">
+    {% if cart.item_count == 0 %}
+      <div class="muted">No Issues acquired yet.</div>
+    {% else %}
+      <form action="{{ routes.cart_url }}" method="post" novalidate>
+        <div class="card">
+          {% for item in cart.items %}
+            <div style="display:flex;gap:1rem;align-items:flex-start;padding:1rem 0;border-bottom:1px solid hsl(var(--border));">
+              <div style="width:96px;flex:0 0 96px;">
+                {% if item.image %}
+                  <img src="{{ item.image | image_url: width: 220 }}" alt="{{ item.image.alt | escape }}" style="width:100%;height:auto;border:1px solid hsl(var(--border));">
+                {% endif %}
+              </div>
+              <div style="flex:1;">
+                <div class="text-display" style="font-size:1.25rem;">{{ item.product.title }}</div>
+                <div class="text-meta" style="margin-top:.25rem;">{{ item.variant.title }}</div>
+                <div class="text-meta" style="margin-top:.5rem;">{{ item.final_line_price | money }}</div>
+              </div>
+              <div style="width:120px;">
+                <label class="text-meta">Qty</label>
+                <input type="number" name="updates[]" value="{{ item.quantity }}" min="1" data-cart-qty>
+              </div>
+              <div style="width:80px;text-align:right;">
+                <a class="text-meta" href="{{ item.url_to_remove }}">Remove</a>
+              </div>
+            </div>
+          {% endfor %}
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:1rem;">
+            <div class="text-meta">Total</div>
+            <div class="text-meta">{{ cart.total_price | money }}</div>
+          </div>
+          <button class="cta" type="submit" name="checkout" style="width:100%;margin-top:1rem;">Checkout</button>
+        </div>
+      </form>
+
+      <script>
+        document.addEventListener('change', function(e){
+          if(e.target && e.target.matches('[data-cart-qty]')){
+            const form = e.target.closest('form');
+            if(form) form.submit();
+          }
+        });
+      </script>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main cart",
+  "settings": []
+}
+{% endschema %}

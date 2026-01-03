@@ -1,0 +1,111 @@
+{% comment %}Issue page{% endcomment %}
+<section class="hero">
+  <div class="container">
+    <div class="text-meta">Issue</div>
+    <h1 class="text-display-lg" style="margin:.75rem 0 1rem;">{{ product.title }}</h1>
+    {% if product.metafields.custom.edition != blank %}
+      <div class="text-meta">Edition — {{ product.metafields.custom.edition }}</div>
+    {% endif %}
+  </div>
+</section>
+
+<section style="padding:3rem 0;">
+  <div class="container" style="max-width:980px;">
+    <div class="grid" style="grid-template-columns: 1.15fr .85fr;">
+      <div>
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image | image_url: width: 1400 }}" alt="{{ product.featured_image.alt | escape }}" style="width:100%;height:auto;border:1px solid hsl(var(--border));">
+        {% endif %}
+
+        {% if product.metafields.custom.issue_story != blank %}
+          <div class="card" style="margin-top:1rem;">
+            <div class="text-meta">Story</div>
+            <div style="margin-top:.75rem;">{{ product.metafields.custom.issue_story }}</div>
+          </div>
+        {% endif %}
+
+        {% if product.metafields.custom.fabric_notes != blank %}
+          <div class="card" style="margin-top:1rem;">
+            <div class="text-meta">Fabric</div>
+            <div style="margin-top:.75rem;">{{ product.metafields.custom.fabric_notes }}</div>
+          </div>
+        {% endif %}
+
+        {% if product.metafields.custom.craftsmanship != blank %}
+          <div class="card" style="margin-top:1rem;">
+            <div class="text-meta">Craftsmanship</div>
+            <div style="margin-top:.75rem;">{{ product.metafields.custom.craftsmanship }}</div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div>
+        <div class="card">
+          {% assign status = product.metafields.custom.status | default: 'acquire' | downcase %}
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;">
+            {% render 'issue-status-pill', status: status %}
+            <div class="text-meta">{{ product.price | money }}</div>
+          </div>
+
+          {% if status == 'vaulted' %}
+            <div class="muted" style="margin-top:1rem;">Permanently unavailable.</div>
+          {% elsif status == 'alert' %}
+            <div class="muted" style="margin-top:1rem;">Temporarily unavailable.</div>
+            <button class="cta" type="button" data-alert-toggle style="margin-top:1rem;width:100%;">Alert Me</button>
+            <div data-alert-form style="display:none;margin-top:1rem;">
+              {% form 'contact' %}
+                <input type="hidden" name="contact[subject]" value="Alert Me — {{ product.title | escape }}">
+                <input type="email" name="contact[email]" placeholder="Email" required>
+                <button class="cta" type="submit" style="width:100%;margin-top:.75rem;">Submit</button>
+              {% endform %}
+            </div>
+          {% else %}
+            {% form 'product', product, class: 'product-form' %}
+              {% unless product.has_only_default_variant %}
+                {% for option in product.options_with_values %}
+                  <label class="text-meta">{{ option.name }}</label>
+                  <select name="options[{{ option.name | escape }}]" required>
+                    <option value="" selected disabled>Select {{ option.name }}</option>
+                    {% for value in option.values %}
+                      <option value="{{ value | escape }}">{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                {% endfor %}
+              {% endunless %}
+
+              <label class="text-meta">Quantity</label>
+              <input type="number" name="quantity" min="1" value="1">
+
+              {% if status == 'limited' %}
+                <div class="text-meta" style="color:hsl(var(--muted-foreground));">Limited Quantity</div>
+              {% endif %}
+
+              <button class="cta" type="submit" name="add" style="width:100%;">
+                {% if status == 'reserve' %}Reserve{% else %}Acquire{% endif %}
+              </button>
+            {% endform %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('[data-alert-toggle]');
+    if(!btn) return;
+    const wrap = btn.closest('.card');
+    const form = wrap && wrap.querySelector('[data-alert-form]');
+    if(form){
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Main product (Issue)",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,56 @@
+{% comment %}Shelf (Account){% endcomment %}
+<section class="hero">
+  <div class="container">
+    <div class="text-meta">Shelf</div>
+    <h1 class="text-display-lg" style="margin:.75rem 0 1rem;">The Collector’s Shelf</h1>
+    <div class="muted">Every Issue you’ve acquired becomes part of your personal mythology.</div>
+  </div>
+</section>
+
+<section style="padding:3rem 0;">
+  <div class="container" style="max-width:980px;">
+    <div class="grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <div class="text-meta">Account</div>
+        <div style="margin-top:1rem;">
+          <div class="text-meta">Name</div>
+          <div>{{ customer.name }}</div>
+          <div class="text-meta" style="margin-top:1rem;">Email</div>
+          <div>{{ customer.email }}</div>
+          <div class="text-meta" style="margin-top:1rem;">Addresses</div>
+          <div class="muted">Edit shipping details in your address book.</div>
+          <a class="text-meta" href="{{ routes.account_addresses_url }}" style="display:inline-block;margin-top:.75rem;">Manage addresses</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="text-meta">Orders</div>
+        <div style="margin-top:1rem;">
+          {% if customer.orders_count == 0 %}
+            <div class="muted">No Issues acquired yet.</div>
+          {% else %}
+            {% for order in customer.orders %}
+              <div style="padding:.75rem 0;border-bottom:1px solid hsl(var(--border));">
+                <div class="text-meta">{{ order.name }} — {{ order.created_at | date: "%b %d, %Y" }}</div>
+                <div class="muted">{{ order.total_price | money }}</div>
+                <a class="text-meta" href="{{ order.customer_url }}">View</a>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="text-meta">Wishlist</div>
+      <div class="muted" style="margin-top:.75rem;">Implement via wishlist app or custom app proxy. This theme provides the Shelf container only.</div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main account (Shelf)",
+  "settings": []
+}
+{% endschema %}

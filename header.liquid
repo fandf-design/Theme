@@ -1,0 +1,40 @@
+{% comment %}FANG & FLEECE — Header{% endcomment %}
+<header class="header">
+  <div class="container">
+    <div class="nav">
+      <div class="nav-left">
+        <a href="{{ routes.root_url }}" class="text-meta" style="letter-spacing:.18em;">FANG &amp; FLEECE</a>
+        <a href="{{ routes.root_url }}">Library</a>
+        <a href="{{ routes.blogs_url }}">Chronicle</a>
+        <a href="{{ routes.search_url | append: '?q=vault&type=product' }}">Vault</a>
+        <a href="{{ routes.account_url }}">Shelf</a>
+      </div>
+
+      <div class="nav-right">
+        <button class="icon-btn" type="button" data-search-open aria-label="Search">
+          {% render 'icon-search' %}
+        </button>
+
+        <a class="icon-btn" href="{{ routes.cart_url }}" aria-label="Cart">
+          {% render 'icon-cart' %}
+          {% if cart.item_count > 0 %}
+            <span class="text-meta" style="margin-left:.5rem; color:hsl(var(--muted-foreground));">{{ cart.item_count }}</span>
+          {% endif %}
+        </a>
+
+        <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">
+          {% render 'icon-sun-moon' %}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% render 'search-modal' %}
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}
