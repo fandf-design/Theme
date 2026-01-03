@@ -1,0 +1,7 @@
+{
+  "sections": {
+    "library_hero": { "type": "library-hero" },
+    "volume_shelf": { "type": "volume-shelf" }
+  },
+  "order": ["library_hero", "volume_shelf"]
+}
